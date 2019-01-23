@@ -4,31 +4,46 @@ def play_game():
     word = random.choice(words).upper()
     correct_guesses = 0
     wrong_letters = ""
-    num_guesses = len(word)*2
-    print(word)
-    word_letters = list(word)
-    print(word_letters)
-    dashes = len(word)
+    correct_letters = ""
+    num_guesses = len(word) * 2
+    secret_word = word
+    word_letters = word
+    word_guessed = []
+    for letter in secret_word:
+        word_guessed.append(" - ")
+        
     
     while num_guesses > 0 and correct_guesses < len(word):
-        print("Word:", " - " * dashes)
+        print("Word:", word_guessed)
         print("Guesses left:", num_guesses)
         print("Incorrect letters:", wrong_letters)
         guess = input("Guess a letter: ")
         if len(guess) != 1:
-            print("You're only supposed to guess a single letter!")
+            print("You're only supposed to guess a letter!")
             
         elif guess.upper().isalpha() == False:
-            print("You're only supposed to guess a single letter!")
-
+            print("Your guess can't contain more than one letter!")
+            
         elif guess.upper() in wrong_letters:
             print("You can't guess the same letter twice!")
             
-        elif guess.upper() in word:
-            print("Correct!")
-            correct_guesses += 1
+        elif guess.upper() in correct_letters:
+            print("You can't guess the same letter twice!")
             
-        elif guess.upper() not in word:
+        elif guess.upper() in word_letters:
+            print("Correct!")
+            
+            for letter in range(len(secret_word)):
+                if guess.upper() == secret_word[letter]:
+                    word_guessed[letter] = guess.upper()
+                    correct_guesses += 1
+            if correct_letters == "":
+                correct_letters = guess.upper()
+                
+            else:
+                correct_letters += guess.upper()
+            
+        elif guess.upper() not in word_letters:
             print("Incorrect!")
             num_guesses -= 1
             if wrong_letters == "":
@@ -41,6 +56,7 @@ def play_game():
         print("Too bad! The word was", word)
         
     else:
+        print("Word:", word_guessed)
         print("Nice job! The word was", word)
             
             
@@ -58,7 +74,9 @@ if "Yes".lower() in hear_rules:
     The number of guesses you have is proportional
     to the difficulty of the word. If you run out of
     guesses and the word isn't filled out, you lose.
-    Make sure your guess is a capital letter.
+    Both capital and lowercase guesses are valid. 
+    Remember to be creative, there are a whole lot
+    of words that I could choose from(500 to be exact)!
     Good luck and have fun!""")
     
     play_game()
